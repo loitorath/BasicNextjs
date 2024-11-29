@@ -28,9 +28,9 @@ export default function Checkbox(){
 
             <div>
                 <div>Your Selected Items</div>
-                <div>Java Checked : {javaChecked}</div>
-                <div>Java Checked : {phpChecked}</div>
-                <div>Java Checked : {csChecked}</div>
+                <div>Java Checked : {javaChecked.toString()}</div>
+                <div>Java Checked : {phpChecked.toString()}</div>
+                <div>Java Checked : {csChecked.toString()}</div>
             </div>
         </>
     );
