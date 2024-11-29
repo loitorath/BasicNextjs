@@ -1,0 +1,244 @@
+Basic Nextjs
+--Example--
+[Route and Structure of Display]
+{folder}app
+
+    ->layout.tsx //{MAIN : Layout} This layout will show/use with default of all page
+    ->template.tsx //{Additional : Layout/Component This is additional part next main layout}
+	->page.tsx // page , this page will show in first path ('localhost/') or ('/')
+
+	->{folder}dashboard  //path: 'localhost:3000/dashboard'
+		->layout.tsx //Layout of dashboard path: 'localhost:3000/dashboard'
+		->page.tsx //Page of dashboard path: 'localhost:3000/dashboard'
+
+	->{folder}home  //path: 'localhost:3000/home'
+		->layout.tsx //Layout of home path: 'localhost:3000/home'
+		->page.tsx //Page of home path: 'localhost:3000/home'
+
+
+[Layout Structure Code]
+layout.tsx
+export default function Layout({children,}:{children:React.ReactNode;})
+{
+    return(
+        <section>
+            {children}
+        </section>
+    );
+}
+
+[Page Structure Code]
+//this part is {children} in Layout Structure
+export default function Page(){
+    return(
+    <div>
+        <p>Hello Wolrd Home!</p>
+    </div>)
+}
+-----------------------------------------------------------------------------------
+[Component]
+------------------------
+    -Example-
+    -Set Component Part-
+    path:app/fonts/ui
+    
+    {folder}app
+        ->{folder}fonts
+            =>{folder}ui
+                ->nav-links-comp.tsx //page component
+    -Code-
+    'use client'; //declear this for use client calculate
+    import { usePathname } from "next/navigation"; //import for use usePathname
+    import Link from "next/link"; //import for can use Link
+
+    export default function NavLinksComp(){
+        const pathname = usePathname(); //use for read path name
+
+        return (
+            <nav>
+                <div className="space-x-2">
+                    //<Link href="PathName">Display-Shortcut-Name</Link>
+                    <Link href="/">Index</Link>
+                    <Link href="/home">Home</Link>
+                    <Link href="/dashboard">Dashboard</Link>
+                </div>
+            </nav>
+        );
+    }
+    ------------------------
+    -Use Component Part-
+    -Example-
+    -Code-
+    import NavLinksComp from "./fonts/ui/nav-links-comp";
+
+    export default function Page(){
+        return(
+            <NavLinksComp/>
+        )
+    }
+
+-----------------------------------------------------------------------------------
+[Function]
+------------------------
+    -Params-
+    -Example-
+
+    [Use Params Function]
+    path:app/pageSeachParams
+
+    {folder}app
+        ->{folder}pageSeachParams
+            ->page.tsx
+
+    url: localhost:3000/pageSearchParams?name=[paramsvalue]
+    -Code-
+    //declear for use client calculate
+    'use client';
+
+    //import to use function params read
+    import { useSearchParams } from "next/navigation";
+
+    export default function Page(){
+        const searchParams = useSearchParams();
+        const name = searchParams.get('name');
+
+        //return page part to show on display monitor
+        return <div>Name = {name}</div>
+    }
+
+    [Without Params Function]
+    path:app/blog/[slug]
+
+    {folder}app
+        ->{folder}blog
+            ->{folder}[slug]    //set slug is variable for receive data
+                ->page.tsx
+
+    url: localhost:3000/blog/[ParamsValue]
+    -code-
+    export default function Page({params,}:{params:{slug:string}}){
+    return (
+                <div>
+                My Post Request : {params.slug}
+                </div>
+            )
+    }
+------------------------
+    -JSON Read-
+    -code-
+    export default async function Page() {
+        const data = await fetch('https://api.vercel.app/blog'); //pull data
+        const posts = await data.json(); //convert data to json readable
+        return(
+            <ul>
+                {posts.map((post:{id:number,title:string}) => (
+                    <li key={post.id}>
+                        {post.title}
+                    </li>
+                ))}
+            </ul>
+        );
+    }
+    -------------
+    -Map read-
+    -code-
+    export default function MapReadExample(){
+        const items = ['java','php','C++'];
+        return (
+            <div>
+                {items.map((item:string)=>   // {[object.map((Child:VariableType)=> <> code...</> )]}
+                    (
+                        <>
+                            <div>
+                                <div key={item}>{item}</div> // in loop case must declear key=[Loopvariable]
+                            </div>
+                        </>
+                    )
+                )}
+            </div>
+        )
+    }
+
+
+------------------------
+-----------------------------------------------------------------------------------
+[React useState Coding Structure]
+-Example-
+-Code-
+'use client';
+
+import { useState } from "react";
+
+export default function Page(){
+    const [x,setX] = useState(0); // set x = 0
+    const handleClick = () => { // set click event
+        setX(x+1);  // after click set x = x +1
+    }
+
+    return (
+        <> // in React must have <> html coding... </> |<> React Fragment tag| , it's pattern of REACT
+        <div>
+            <button className="border border-black p-2 bg-lime-300 m-1" 
+            onClick={()=> handleClick()}>
+                Click
+            </button>
+            <div>
+                x = {x}
+            </div>
+        </div>
+        </>
+    )
+}
+------------------------
+[props-interface]
+-Example-
+Set Pattern
+-code-
+'use client';
+
+// use interface for force to Header Function must use 'string' variable
+interface HeaderProps{
+    title: string;
+}
+
+export default function Header({title}:HeaderProps){
+    return (
+        <h1>{title}</h1>
+    )
+}
+Use Pattern
+-code-
+import Header from "../props/page";
+export default function Page(){
+    return(
+        <>
+            <div>Header And Props</div>
+            <Header title="My Products from Server"/>
+        </>
+        )
+    }
+
+------------
+    [Multi-[prop]]
+-code-
+'use client';
+
+interface UserProfileProps{
+    name: string;
+    age: number;
+    email: string;
+    isAdmin?: boolean;
+}
+
+export default function UserProfile({name,age,email,isAdmin}:UserProfileProps){
+    return(
+        <div>
+            <h1>{name}</h1>
+            <p>{age}</p>
+            <p>{email}</p>
+            <p>{isAdmin ? 'Admin' : 'User'}</p>
+        </div>
+    )
+}
+
+------------------------

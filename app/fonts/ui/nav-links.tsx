@@ -9,7 +9,8 @@ export default function NavLinks(){
     return (
         <nav>
             <div className="space-x-2">
-                <Link href="/">Home</Link>
+                <Link href="/">Index</Link>
+                <Link href="/home">Home</Link>
                 <Link href="/dashboard">Dashboard</Link>
             </div>
         </nav>
